@@ -20,24 +20,52 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 WATER_PDB = os.path.join(HERE, 'water.pdb')
 UREA_PDB = os.path.join(HERE, 'urea.pdb')
 
-    
-def test_mixture(in_tmpdir):
-    water = mda.Universe(WATER_PDB)
-    urea = mda.Universe(UREA_PDB)
-    
-    # PS(ag, number, instructions)
-    mixture = mdapackmol.packmol(
-        [mdapackmol.PackmolStructure(
-            water,
-            number=1000,
-            instructions=['inside box 0. 0. 0. 40. 40. 40.'],
-        ),
-         mdapackmol.PackmolStructure(
-             urea,
-             number=400,
-             instructions=['inside box 0. 0. 0. 40. 40. 40.'],
-         ),
-        ]
-    )
+@pytest.fixture()
+def water():
+    return mda.Universe(WATER_PDB)
 
-    assert len(mixture.atoms) == 1000 * len(water.atoms) + 400 * len(urea.atoms)
+
+@pytest.fixture()
+def urea():
+    return mda.Universe(UREA_PDB)
+
+
+class TestMixture(object):
+    @staticmethod
+    @pytest.fixture()
+    def mixture(in_tmpdir, water, urea):
+        # PS(ag, number, instructions)
+        mixture = mdapackmol.packmol(
+            [mdapackmol.PackmolStructure(
+                water,
+                number=1000,
+                instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+            ),
+             mdapackmol.PackmolStructure(
+                 urea,
+                 number=400,
+                 instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+             ),
+            ]
+        )
+
+        return mixture
+
+    def test_mixture_size(self, mixture, water, urea):
+        assert len(mixture.atoms) == 1000 * len(water.atoms) + 400 * len(urea.atoms)
+
+    def test_residue_size(self, mixture, water, urea):
+        for res in mixture.residues[:3]:
+            assert len(res.atoms) == len(water.atoms)
+
+        for res in mixture.residues[1000:1003]:
+            assert len(res.atoms) == len(urea.atoms)
+    
+    def test__resnames(self, mixture, water, urea):
+        for res in mixture.residues[:3]:
+            for atom_a, atom_b in zip(res.atoms, water.atoms):
+                assert atom_a.resname == atom_b.resname
+
+        for res in mixture.residues[1000:1003]:
+            for atom_a, atom_b in zip(res.atoms, urea.atoms):
+                assert atom_a.resname == atom_b.resname
