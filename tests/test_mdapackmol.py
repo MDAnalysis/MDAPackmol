@@ -2,24 +2,42 @@
 # -*- coding: utf-8 -*-
 
 """Tests for `mdapackmol` package."""
-
+import os
 import pytest
+import MDAnalysis as mda
+
+import mdapackmol
 
 
-from mdapackmol import mdapackmol
+@pytest.fixture()
+def in_tmpdir(tmpdir):
+    os.chdir(str(tmpdir))
+
+    yield str(tmpdir)
 
 
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
+HERE = os.path.abspath(os.path.dirname(__file__))
+WATER_PDB = os.path.join(HERE, 'water.pdb')
+UREA_PDB = os.path.join(HERE, 'urea.pdb')
 
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+    
+def test_mixture(in_tmpdir):
+    water = mda.Universe(WATER_PDB)
+    urea = mda.Universe(UREA_PDB)
+    
+    # PS(ag, number, instructions)
+    mixture = mdapackmol.packmol(
+        [mdapackmol.PackmolStructure(
+            water,
+            number=1000,
+            instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+        ),
+         mdapackmol.PackmolStructure(
+             urea,
+             number=400,
+             instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+         ),
+        ]
+    )
 
-
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+    assert len(mixture.atoms) == 1000 * len(water.atoms) + 400 * len(urea.atoms)
