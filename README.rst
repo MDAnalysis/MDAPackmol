@@ -33,7 +33,7 @@ Usage Example
    system = mdapackmol.packmol(
        [mdapackmol.PackmolStructure(
            water, number=1000,
-           instrutions=['inside box 0. 0. 0. 40. 40. 40.']),
+           instructions=['inside box 0. 0. 0. 40. 40. 40.']),
         mdapackmol.PackmolStructure(
            urea, number=400,
            instructions=['inside box 0. 0. 0. 40. 40. 40.'])]
