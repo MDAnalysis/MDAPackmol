@@ -111,20 +111,47 @@ def reassign_topology(structures, new):
     """
     index = 0
 
+    bonds = []
+    angles = []
+    dihedrals = []
+    impropers = []
+    
     while index < len(new.atoms):
         # first atom we haven't dealt with yet
         start = new.atoms[index]
         # the resname was altered to give a hint to what template it was from
-        template = structures[int(start.resname[1:])]
-        # update the index pointer to be on next unknown atom
-        index += len(template.ag.atoms)
+        template = structures[int(start.resname[1:])].ag
 
         # Update residue names
-        nres = len(template.ag.residues)
-        new.residues[start.resindex:start.resindex + nres].resnames = template.ag.residues.resnames
+        nres = len(template.residues)
+        new.residues[start.resindex:start.resindex + nres].resnames = template.residues.resnames
 
-        # TODO: Bonds, Angles, Dihedrals, Impropers
-        
+        if hasattr(template, 'bonds'):
+            bonds.extend((template.bonds.to_indices() + index).tolist())
+        if hasattr(template, 'angles'):
+            angles.extend((template.angles.to_indices() + index).tolist())
+        if hasattr(template, 'dihedrals'):
+            dihedrals.extend((template.dihedrals.to_indices() + index).tolist())
+        if hasattr(template, 'impropers'):
+            impropers.extend((template.impropers.to_indices() + index).tolist())
+
+        # update the index pointer to be on next unknown atom
+        index += len(template.atoms)
+
+    if bonds:
+        # convert to tuples for hashability
+        bonds = [tuple(val) for val in bonds]
+        new.add_TopologyAttr('bonds', values=bonds)
+    if angles:
+        angles = [tuple(val) for val in bonds]
+        new.add_TopologyAttr('angles', values=angles)
+    if dihedrals:
+        dihedrals = [tuple(val) for val in dihedrals]
+        new.add_TopologyAttr('dihedrals', values=dihedrals)
+    if impropers:
+        impropers = [tuple(val) for val in impropers]
+        new.add_TopologyAttr('impropers', values=impropers)
+
     return new
 
 
@@ -137,6 +164,11 @@ def packmol(structures, tolerance=None):
       list of PackmolStruture objects
     tolerance : float, optional
       Packmol tolerance, defaults to 2.0
+
+    Returns
+    -------
+    new : MDAnalysis.Universe
+      Universe object of the system created by Packmol
     """
     make_packmol_input(structures, tolerance=tolerance)
 

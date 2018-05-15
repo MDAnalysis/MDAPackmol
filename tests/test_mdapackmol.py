@@ -69,3 +69,24 @@ class TestMixture(object):
         for res in mixture.residues[1000:1003]:
             for atom_a, atom_b in zip(res.atoms, urea.atoms):
                 assert atom_a.resname == atom_b.resname
+
+def test_bonds(urea, water):
+    urea.atoms.guess_bonds()
+    water.atoms.guess_bonds()
+
+    mixture = mdapackmol.packmol(
+        [mdapackmol.PackmolStructure(
+            water,
+            number=50,
+            instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+        ),
+         mdapackmol.PackmolStructure(
+             urea,
+             number=50,
+             instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+         ),
+        ]
+    )
+
+    assert hasattr(mixture, 'bonds')
+    assert len(mixture.bonds) == len(water.bonds) * 50 + len(urea.bonds) * 50
