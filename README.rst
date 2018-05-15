@@ -3,35 +3,44 @@ MDA Packmol
 ===========
 
 
-.. image:: https://img.shields.io/pypi/v/mdapackmol.svg
-        :target: https://pypi.python.org/pypi/mdapackmol
-
-.. image:: https://img.shields.io/travis/richardjgowers/mdapackmol.svg
-        :target: https://travis-ci.org/richardjgowers/mdapackmol
-
-.. image:: https://readthedocs.org/projects/mdapackmol/badge/?version=latest
-        :target: https://mdapackmol.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-
-
-
 An MDAnalysis wrapper around Packmol
 
 
 * Free software: GNU General Public License v3
-* Documentation: https://mdapackmol.readthedocs.io.
-
 
 Features
 --------
 
-* TODO
+* Allows combining MDAnalysis and Packmol
 
-Credits
--------
+* Preserves the topology information (bonds etc) of your system after Packmol
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+Usage Example
+-------------
+
+.. code-block:: python
+
+   import MDAnalysis as mda
+   import mdapackmol
+   
+   # load individual molecule files
+   water = mda.Universe('water.pdb')
+   urea = mda.Universe('urea.pdb')
+   
+   # call Packmol with MDAnalysis objects as arguments
+   # the 'instructions' allow for any valid Packmol commands
+   system = mdapackmol.packmol(
+       [mdapackmol.PackmolStructure(
+           water, number=1000,
+           instrutions=['inside box 0. 0. 0. 40. 40. 40.']),
+        mdapackmol.PackmolStructure(
+           urea, number=400,
+           instructions=['inside box 0. 0. 0. 40. 40. 40.'])]
+   )
+   
+   # the returned system is a MDAnalysis Universe
+   # with all topology information from building blocks retained
+   # which can then be saved into any format
+   # eg to Lammps data file:
+   system.atoms.write('topology.data')
