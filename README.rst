@@ -1,14 +1,17 @@
-===========
-MDA Packmol
-===========
+==========
+MDAPackmol
+==========
 
-An MDAnalysis wrapper around Packmol
+An MDAnalysis_ wrapper around Packmol_
 
 * Allows combining MDAnalysis and Packmol
 
 * Preserves the topology information (bonds etc) of your system after Packmol
 
 * Free software: GNU General Public License v3
+
+.. _MDAnalysis: https://www.mdanalysis.org
+.. _Packmol: http://m3g.iqm.unicamp.br/packmol/home.shtml
 
 Usage Example
 -------------
@@ -43,7 +46,7 @@ Usage Example
 Citing
 ------
 
-If you find mdapackmol, please cite the following sources:
+If you find mdapackmol useful for you, please cite the following sources:
 
  * L Martinez, R Andrade, E G Birgin, J M Martinez, "Packmol: A package for building initial configurations for molecular dynamics simulations". Journal of Computational Chemistry, 30, 2157-2164, 2009. 
  
