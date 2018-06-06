@@ -1,5 +1,6 @@
 import MDAnalysis as mda
 import subprocess
+import warnings
 
 
 PACKMOL_INP = 'packmol.inp'  # name of .inp file given to packmol
@@ -115,17 +116,33 @@ def reassign_topology(structures, new):
     angles = []
     dihedrals = []
     impropers = []
-    
+
+    # add required attributes
+    for attr in ['types', 'names', 'charges', 'masses']:
+        if any(hasattr(pms.ag, attr) for pms in structures):
+            new.add_TopologyAttr(attr)
+
+            if not all(hasattr(pms.ag, attr) for pms in structures):
+                warnings.warn("added attribute which not all templates had")
+
     while index < len(new.atoms):
         # first atom we haven't dealt with yet
         start = new.atoms[index]
         # the resname was altered to give a hint to what template it was from
         template = structures[int(start.resname[1:])].ag
+        # grab atomgroup which matches template
+        to_change = new.atoms[index:index + len(template.atoms)]
 
         # Update residue names
         nres = len(template.residues)
         new.residues[start.resindex:start.resindex + nres].resnames = template.residues.resnames
 
+        # atom attributes
+        for attr in ['types', 'names', 'charges', 'masses']:
+            if hasattr(template.atoms, attr):
+                setattr(to_change, attr, getattr(template.atoms, attr))
+
+        # bonds/angles/torsions
         if hasattr(template, 'bonds'):
             bonds.extend((template.bonds.to_indices() + index).tolist())
         if hasattr(template, 'angles'):
