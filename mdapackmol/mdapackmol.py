@@ -160,7 +160,7 @@ def reassign_topology(structures, new):
         bonds = [tuple(val) for val in bonds]
         new.add_TopologyAttr('bonds', values=bonds)
     if angles:
-        angles = [tuple(val) for val in bonds]
+        angles = [tuple(val) for val in angles]
         new.add_TopologyAttr('angles', values=angles)
     if dihedrals:
         dihedrals = [tuple(val) for val in dihedrals]
