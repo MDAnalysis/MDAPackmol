@@ -1,5 +1,10 @@
 # Config file for automatic testing at travis-ci.org
 
+env:
+  global:
+    - CONDA_DEPENDENCIES="mdanalysis numpy"
+    - CONDA_CHANNELS='biobuilds conda-forge'
+
 language: python
 python:
   - 3.6
@@ -8,6 +13,8 @@ python:
   - 2.7
 
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install .
-
+install:
+  - git clone git://github.com/astropy/ci-helpers.git
+  - source ci-helpers/travis/setup_conda.sh
+  - pip install -v .
 
