@@ -18,3 +18,5 @@ install:
   - source ci-helpers/travis/setup_conda.sh
   - pip install -v .
 
+script:
+  - pytest
