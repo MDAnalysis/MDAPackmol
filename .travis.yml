@@ -2,8 +2,8 @@
 
 env:
   global:
-    - CONDA_DEPENDENCIES="mdanalysis numpy"
-    - CONDA_CHANNELS='biobuilds conda-forge'
+    - CONDA_DEPENDENCIES="mdanalysis numpy packmol"
+    - CONDA_CHANNELS='biobuilds conda-forge richardjgowers'
 
 language: python
 python:
