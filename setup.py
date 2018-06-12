@@ -12,7 +12,7 @@ requirements = ['mdanalysis' ]
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest', 'pytest-cov']
+test_requirements = ['pytest', 'pytest-cov', 'coveralls-python']
 
 setup(
     author="Richard J Gowers",

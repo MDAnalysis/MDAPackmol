@@ -16,7 +16,7 @@ install:
   - pip install -v .
 
 script:
-  - pytest --cov=mdapackmol/
+  - pytest --cov=mdapackmol
 
 after_success:
   - coveralls
