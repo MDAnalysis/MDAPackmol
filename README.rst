@@ -2,8 +2,14 @@
 MDAPackmol
 ==========
 
-.. image:: https://travis-ci.com/MDAnalysis/MDAPackmol.svg?branch=master
-    :target: https://travis-ci.com/MDAnalysis/MDAPackmol
+.. |travis| image:: https://travis-ci.com/MDAnalysis/MDAPackmol.svg?branch=master
+    :target: https://travis-ci.com/MDAnalysis/MDAPackmol 
+.. |coveralls| image:: https://coveralls.io/repos/github/MDAnalysis/MDAPackmol/badge.svg?branch=master
+    :target: https://coveralls.io/github/MDAnalysis/MDAPackmol?
+
+|travis| |coveralls|
+
+-----
 
 An MDAnalysis_ wrapper around Packmol_
 
