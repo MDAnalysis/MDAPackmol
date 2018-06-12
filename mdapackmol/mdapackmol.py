@@ -1,5 +1,9 @@
 import MDAnalysis as mda
-import subprocess
+import sys
+if (sys.version_info[0] < 3) or (sys.version_info[1] <= 4):
+    import subprocess32 as subprocess
+else:
+    import subprocess
 import warnings
 
 
