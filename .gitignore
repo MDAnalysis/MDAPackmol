@@ -11,3 +11,4 @@
 build/
 .pytest_cache
 docs/_build
+.egg*
