@@ -13,7 +13,7 @@ python:
 install:
   - git clone git://github.com/astropy/ci-helpers.git
   - source ci-helpers/travis/setup_conda.sh
-  - pip install -v .
+  - pip install -e .
   - pip install pytest-cov python-coveralls
 
 script:
