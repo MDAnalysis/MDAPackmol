@@ -2,6 +2,9 @@
 MDAPackmol
 ==========
 
+.. image:: https://travis-ci.com/MDAnalysis/MDAPackmol.svg?branch=master
+    :target: https://travis-ci.com/MDAnalysis/MDAPackmol
+
 An MDAnalysis_ wrapper around Packmol_
 
 * Allows combining MDAnalysis and Packmol
