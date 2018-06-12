@@ -14,7 +14,7 @@ install:
   - git clone git://github.com/astropy/ci-helpers.git
   - source ci-helpers/travis/setup_conda.sh
   - pip install -v .
-  - pip install pytest-cov coveralls-python
+  - pip install pytest-cov python-coveralls
 
 script:
   - pytest --cov=mdapackmol/
