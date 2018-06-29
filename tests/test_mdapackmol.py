@@ -90,3 +90,22 @@ def test_bonds(urea, water):
 
     assert hasattr(mixture, 'bonds')
     assert len(mixture.bonds) == len(water.bonds) * 50 + len(urea.bonds) * 50
+
+
+def test_cleanup(urea, water):
+    mixture = mdapackmol.packmol(
+        [mdapackmol.PackmolStructure(
+            water,
+            number=2,
+            instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+        ),
+         mdapackmol.PackmolStructure(
+             urea,
+             number=2,
+             instructions=['inside box 0. 0. 0. 40. 40. 40.'],
+         ),
+        ]
+    )
+
+    assert not os.path.exists(mdapackmol.mdapackmol.PACKMOL_INP)
+    assert not os.path.exists('output.pdb')
