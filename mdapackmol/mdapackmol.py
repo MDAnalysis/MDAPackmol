@@ -84,6 +84,11 @@ def make_packmol_input(structures, tolerance=None):
     tolerance : float, optional
       minimum distance between molecules, defaults to 2.0
     """
+    # Check if all structures are suitable, fix them if needed
+    for s in structures:
+        if not hasattr(s.ag, 'resnames'):
+            s.ag.universe.add_TopologyAttr('resnames')
+
     if tolerance is None:
         tolerance = 2.0
 
