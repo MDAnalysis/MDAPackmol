@@ -7,4 +7,5 @@ __email__ = 'richardjgowers@gmail.com'
 __version__ = '0.1.0'
 
 from . import mdapackmol
+from . import tools
 from .mdapackmol import packmol, PackmolStructure
